@@ -1,9 +1,11 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1706.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeritcalViews", "VeritcalViews\VeritcalViews.csproj", "{7E813617-758C-4F1B-A483-677617CA6401}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerticalViews", "VerticalViews\VerticalViews.csproj", "{7E813617-758C-4F1B-A483-677617CA6401}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerticalViews.ExampleMvc", "VerticalViews.ExampleMvc\VerticalViews.ExampleMvc.csproj", "{9973D890-89DB-485C-8B2D-BC5435A7CF1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7E813617-758C-4F1B-A483-677617CA6401}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E813617-758C-4F1B-A483-677617CA6401}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E813617-758C-4F1B-A483-677617CA6401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9973D890-89DB-485C-8B2D-BC5435A7CF1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9973D890-89DB-485C-8B2D-BC5435A7CF1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9973D890-89DB-485C-8B2D-BC5435A7CF1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9973D890-89DB-485C-8B2D-BC5435A7CF1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
