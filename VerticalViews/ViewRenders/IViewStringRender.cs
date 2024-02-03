@@ -1,10 +1,7 @@
-﻿using VerticalViews.Options;
-
-namespace VerticalViews.ViewRenders
+﻿namespace VerticalViews.ViewRenders
 {
     public interface IViewStringRender
     {
-        Task<string> RenderRazorViewToString<TOptions>(string viewName, object model, bool IsPartailView)
-            where TOptions : VerticalViewOptions;
+        Task<string> RenderRazorViewToString(object model, BaseRequest options, bool isPartailView);
     }
 }

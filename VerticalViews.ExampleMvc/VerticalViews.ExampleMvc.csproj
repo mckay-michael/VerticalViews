@@ -16,20 +16,25 @@
     <None Remove="Features\" />
     <None Remove="Features\Home\" />
     <None Remove="Features\Home\Views\" />
-    <None Remove="Features\Home\Options\" />
     <None Remove="Features\Shared\" />
     <None Remove="Features\Shared\Views\" />
     <None Remove="Features\Privacy\" />
     <None Remove="Features\Error\" />
+    <None Remove="Features\Home\Mediator\" />
+    <None Remove="Features\Home\ViewRequests\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
     <Folder Include="Features\Home\" />
     <Folder Include="Features\Home\Views\" />
-    <Folder Include="Features\Home\Options\" />
     <Folder Include="Features\Shared\" />
     <Folder Include="Features\Shared\Views\" />
     <Folder Include="Features\Privacy\" />
     <Folder Include="Features\Error\" />
+    <Folder Include="Features\Home\Mediator\" />
+    <Folder Include="Features\Home\ViewRequests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
   </ItemGroup>
 </Project>

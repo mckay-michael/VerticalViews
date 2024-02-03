@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using VerticalViews.ResponseBehavior;
 using VerticalViews.ViewRenders;
 
 namespace VerticalViews.Registration;
@@ -15,10 +16,11 @@ public static class ServiceRegistrar
         const string viewLocation = "/Features/{1}/Views/{0}.cshtml";
         const string featuresLocation = "/Features/{1}/{0}.cshtml";
         const string viewSharedLocation = "/Features/Shared/Views/{0}.cshtml";
-
+        services
+            .AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(assembly));
         services.AddHttpContextAccessor();
         services.AddScoped<IViewSender, ViewSender>(); 
-        services.AddScoped<IViewStringRender, ViewStringRender>();
+        services.AddScoped(typeof(IViewStringRender), typeof(ViewStringRender));
 
         services.AddMvc().AddRazorOptions(options =>
         {
@@ -38,25 +40,11 @@ public static class ServiceRegistrar
             options.PageViewLocationFormats.Add(viewSharedLocation);
             options.AreaViewLocationFormats.Add(viewSharedLocation);
         });
-
-        var iViewRequestHandlerType = typeof(IViewRequestHandler<,>);
-
-        var modules = assembly.DefinedTypes
-            .Where(type => type.GetInterfaces()
-                .Any(interfaceType => IsIViewRequestHandler(interfaceType, iViewRequestHandlerType)));
-
-        foreach (var module in modules)
-        {
-            var interfaceType = module.GetInterfaces().First(interfaceType =>
-                IsIViewRequestHandler(interfaceType, iViewRequestHandlerType));
-
-            services.AddTransient(interfaceType, module);
-        }
     }
-    public static bool IsIViewRequestHandler(Type interfaceType, Type iViewRequestHandlerType)
+
+    public static bool IsIViewRequestHandler(Type interfaceType, Type[] iViewRequestHandlerType)
     {
         return interfaceType.IsGenericType
-            && iViewRequestHandlerType.IsAssignableFrom(interfaceType.GetGenericTypeDefinition());
+            && iViewRequestHandlerType.Any(type => type.IsAssignableFrom(interfaceType.GetGenericTypeDefinition()));
     }
 }
-

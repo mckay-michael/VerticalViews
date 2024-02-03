@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using VerticalViews.ExampleMvc.Features.Error;
-using VerticalViews.ExampleMvc.Features.Home.Options;
+using VerticalViews.ExampleMvc.Features.Home.ViewRequests;
 using VerticalViews.ExampleMvc.Features.Privacy;
 using VerticalViews.ExampleMvc.Models;
+using VerticalViews.Factories;
 using VerticalViews.Registration;
 
 namespace VerticalViews.ExampleMvc;
@@ -15,7 +16,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddVerticalViews(Assembly.GetExecutingAssembly());
+        builder.Services
+            .AddVerticalViews(Assembly.GetExecutingAssembly());
 
         builder.Services.Configure<RazorViewEngineOptions>(o =>
         {
@@ -35,26 +37,28 @@ public class Program
 
         app.UseAuthorization();
 
-        app.MapGet("/", async ([FromServices] IViewSender viewSender) => await viewSender.View<HomeViewOptions>("Index"));
-        app.MapGet("/PartailViewIndex", async ([FromServices] IViewSender viewSender) => await viewSender.PartailView<HomeViewOptions>("Index"));
+        app.MapGet("/", async ([FromServices] IViewSender viewSender) => await viewSender.View(ViewRequestFactory.Create<HomeViewRequest>()));
+        app.MapGet("/PartailViewIndex", async ([FromServices] IViewSender viewSender) => await viewSender.PartailView(ViewRequestFactory.Create<HomeViewRequest>()));
 
         app.MapGet("/Privacy", async ([FromServices] IViewSender viewSender) =>
-            await viewSender.View<PrivacyViewModel, PrivacyViewOptions>("Privacy", new GetPrivacyInformation
-            {
-                Title = "Hello Mediator"
-            }));
+            await viewSender.View(ViewRequestFactory.Create<GetPrivacyInformation, PrivacyViewModel>(
+                new GetPrivacyInformationRequest
+                {
+                    Title = "Hello Mediator"
+                })));
 
         app.MapGet("/PartailViewPrivacy", async ([FromServices] IViewSender viewSender) =>
-            await viewSender.PartailView<PrivacyViewModel, PrivacyViewOptions>("Privacy", new GetPrivacyInformation
-            {
-                Title = "Hello Mediator PartailViewPrivacy"
-            }));
+            await viewSender.PartailView(ViewRequestFactory.Create<GetPrivacyInformation, PrivacyViewModel>(
+                new GetPrivacyInformationRequest
+                {
+                    Title = "Hello Mediator PartailViewPrivacy"
+                })));
 
         app.MapGet("/Error", async ([FromServices] IViewSender viewSender) =>
-            await viewSender.View<ErrorViewModel, ErrorViewOptions>("Error"));
+            await viewSender.View(ViewRequestFactory.Create<ErrorViewOptions>()));
 
         app.MapGet("/PartailViewError", async ([FromServices] IViewSender viewSender) =>
-            await viewSender.PartailView<ErrorViewModel, ErrorViewOptions>("Error"));
+            await viewSender.PartailView(ViewRequestFactory.Create<ErrorViewOptions>()));
 
         app.Run();
     }

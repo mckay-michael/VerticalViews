@@ -16,19 +16,22 @@
     <None Remove="Results\" />
     <None Remove="Registration\" />
     <None Remove="ViewRenders\" />
-    <None Remove="Options\" />
+    <None Remove="ResponseBehavior\" />
+    <None Remove="Factories\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Wrappers\" />
     <Folder Include="Results\" />
     <Folder Include="Registration\" />
     <Folder Include="ViewRenders\" />
-    <Folder Include="Options\" />
+    <Folder Include="ResponseBehavior\" />
+    <Folder Include="Factories\" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
 </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
   </ItemGroup>
 </Project>

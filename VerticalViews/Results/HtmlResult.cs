@@ -18,6 +18,7 @@ class HtmlResult : IResult
     {
         httpContext.Response.ContentType = MediaTypeNames.Text.Html;
         httpContext.Response.ContentLength = Encoding.UTF8.GetByteCount(_html);
+
         return httpContext.Response.WriteAsync(_html);
     }
 }

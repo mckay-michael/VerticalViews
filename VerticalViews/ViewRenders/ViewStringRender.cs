@@ -1,16 +1,12 @@
-﻿using System;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.Collections.Concurrent;
-using VerticalViews.Wrappers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
-using VerticalViews.Options;
 
 namespace VerticalViews.ViewRenders;
 
@@ -21,36 +17,26 @@ public class ViewStringRender : IViewStringRender
 
     private readonly ICompositeViewEngine _viewEngine;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IServiceProvider _serviceProvider;
     private readonly ITempDataDictionary? _tempData;
 
-    private static readonly ConcurrentDictionary<Type, RequestHandlerBase> _requestHandlers = new();
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Mediator"/> class.
-    /// </summary>
-    /// <param name="serviceProvider">Service provider. Can be a scoped or root provider</param>
     public ViewStringRender(
         ICompositeViewEngine viewEngine,
-        IHttpContextAccessor httpContextAccessor,
-        IServiceProvider serviceProvider)
+        IHttpContextAccessor httpContextAccessor)
     {
         _viewEngine = viewEngine;
         _httpContextAccessor = httpContextAccessor;
-        _serviceProvider = serviceProvider;
 
         var factory = httpContextAccessor.HttpContext?.RequestServices?.GetRequiredService<ITempDataDictionaryFactory>();
         _tempData = factory?.GetTempData(httpContextAccessor.HttpContext);
     }
 
-    public async Task<string> RenderRazorViewToString<TOptions>(string viewName, object model, bool IsPartailView) where TOptions : VerticalViewOptions
+    public async Task<string> RenderRazorViewToString(object model, BaseRequest options, bool isPartailView)
     {
         var actionContext = new ActionContext(
             _httpContextAccessor.HttpContext,
             _httpContextAccessor.HttpContext.GetRouteData(),
             new ControllerActionDescriptor());
-
-        var options = (VerticalViewOptions)Activator.CreateInstance<TOptions>();
 
         actionContext.RouteData.Values.TryAdd(_controllerKey, options.Feature);
         actionContext.RouteData.Values.TryAdd(_areaKey, options.Group);
@@ -61,21 +47,20 @@ public class ViewStringRender : IViewStringRender
 
         using var writer = new StringWriter();
 
-        var viewResult = _viewEngine.FindView(actionContext, viewName, !IsPartailView);
+        var viewResult = _viewEngine.FindView(actionContext, options.ViewName, !isPartailView);
 
         if (viewResult.View is null)
         {
-            viewResult = _viewEngine.GetView(viewName, viewName, !IsPartailView);
+            viewResult = _viewEngine.GetView(options.ViewName, options.ViewName, !isPartailView);
         }
 
         var viewContext = new ViewContext(
-        actionContext,
-        viewResult.View,
-        viewData,
-        _tempData,
-        writer,
-        new HtmlHelperOptions()
-        );
+            actionContext,
+            viewResult.View,
+            viewData,
+            _tempData,
+            writer,
+            new HtmlHelperOptions());
 
         await viewResult.View.RenderAsync(viewContext);
 
