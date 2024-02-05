@@ -4,28 +4,30 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>VerticalViews.01.28.24.001</PackageId>
-    <Version>1.0.0</Version>
+    <PackageId>VerticalViews</PackageId>
+    <Version>8.0.1</Version>
     <Authors>McKay Smith</Authors>
     <Company>McKay Smith</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Wrappers\" />
     <None Remove="Results\" />
     <None Remove="Registration\" />
     <None Remove="ViewRenders\" />
-    <None Remove="ResponseBehavior\" />
     <None Remove="Factories\" />
+    <None Remove="Request\" />
+    <None Remove="Response\" />
+    <None Remove="Strategies\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Wrappers\" />
     <Folder Include="Results\" />
     <Folder Include="Registration\" />
     <Folder Include="ViewRenders\" />
-    <Folder Include="ResponseBehavior\" />
     <Folder Include="Factories\" />
+    <Folder Include="Request\" />
+    <Folder Include="Response\" />
+    <Folder Include="Strategies\" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

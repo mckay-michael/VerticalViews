@@ -2,7 +2,10 @@
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using VerticalViews.Request;
+using VerticalViews.Response;
 using VerticalViews.ResponseBehavior;
+using VerticalViews.Strategies;
 using VerticalViews.ViewRenders;
 
 namespace VerticalViews.Registration;
@@ -10,16 +13,22 @@ namespace VerticalViews.Registration;
 public static class ServiceRegistrar
 {
 
-    public static void AddVerticalViews(this IServiceCollection services, Assembly assembly)
+    public static void AddVerticalViews(this IServiceCollection services, params Assembly[] assembly)
     {
         const string viewAreaLocation = "/Features/{2}/{1}/Views/{0}.cshtml";
         const string viewLocation = "/Features/{1}/Views/{0}.cshtml";
         const string featuresLocation = "/Features/{1}/{0}.cshtml";
         const string viewSharedLocation = "/Features/Shared/Views/{0}.cshtml";
+
         services
             .AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(assembly));
+
         services.AddHttpContextAccessor();
-        services.AddScoped<IViewSender, ViewSender>(); 
+
+        services.AddScoped(typeof(IViewSender<,>), typeof(ViewSender<,>)); 
+        services.AddScoped(typeof(IViewRequestStrategy<,>), typeof(ViewRequestStrategy<,>)); 
+        services.AddScoped(typeof(IResponsePipeline<,>), typeof(ResponsePipeline<,>)); 
+        services.AddScoped(typeof(IRequestPipeline<,>), typeof(RequestPipeline<,>)); 
         services.AddScoped(typeof(IViewStringRender), typeof(ViewStringRender));
 
         services.AddMvc().AddRazorOptions(options =>
@@ -40,11 +49,5 @@ public static class ServiceRegistrar
             options.PageViewLocationFormats.Add(viewSharedLocation);
             options.AreaViewLocationFormats.Add(viewSharedLocation);
         });
-    }
-
-    public static bool IsIViewRequestHandler(Type interfaceType, Type[] iViewRequestHandlerType)
-    {
-        return interfaceType.IsGenericType
-            && iViewRequestHandlerType.Any(type => type.IsAssignableFrom(interfaceType.GetGenericTypeDefinition()));
     }
 }

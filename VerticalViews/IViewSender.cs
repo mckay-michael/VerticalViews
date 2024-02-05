@@ -2,13 +2,10 @@
 
 namespace VerticalViews;
 
-public interface IViewSender
+public interface IViewSender<TRequest, TViewModel>
+    where TRequest : BaseRequest
 {
-    Task<IResult> PartailView<TViewModel>(IViewRequest<TViewModel> request, CancellationToken cancellationToken = default);
+    Task<IResult> PartailView(BaseRequest request, CancellationToken cancellationToken = default);
 
-    Task<IResult> PartailView(ViewRequest request, CancellationToken cancellationToken = default);
-
-    Task<IResult> View<TViewModel>(IViewRequest<TViewModel> request, CancellationToken cancellationToken = default);
-
-    Task<IResult> View(ViewRequest request, CancellationToken cancellationToken = default);
+    Task<IResult> View(BaseRequest request, CancellationToken cancellationToken = default);
 }
