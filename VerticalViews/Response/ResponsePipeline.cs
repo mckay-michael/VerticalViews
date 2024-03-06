@@ -8,7 +8,7 @@ using VerticalViews.ViewRenders;
 namespace VerticalViews.Response;
 
 public class ResponsePipeline<TRequest, TViewModel> : IResponsePipeline<TRequest, TViewModel>
-    where TRequest : BaseRequest
+    where TRequest : IBaseRequest
 {
     private readonly IEnumerable<IResponseBehavior<TRequest, TViewModel>> _responseBehaviors;
     private readonly IViewStringRender _viewRender;
@@ -37,7 +37,7 @@ public class ResponsePipeline<TRequest, TViewModel> : IResponsePipeline<TRequest
 
         return await _responseBehaviors
             .Reverse()
-            .Aggregate((RequestHandlerDelegate)Handler,
+            .Aggregate((ResponseHandlerDelegate)Handler,
                 (next, behavior) => () => behavior.Handle(viewModel, next, cancellationToken))();
     }
 }

@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>VerticalViews</PackageId>
-    <Version>8.0.1</Version>
+    <Version>8.0.5</Version>
     <Authors>McKay Smith</Authors>
     <Company>McKay Smith</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -18,7 +18,6 @@
     <None Remove="Factories\" />
     <None Remove="Request\" />
     <None Remove="Response\" />
-    <None Remove="Strategies\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Results\" />
@@ -27,7 +26,6 @@
     <Folder Include="Factories\" />
     <Folder Include="Request\" />
     <Folder Include="Response\" />
-    <Folder Include="Strategies\" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

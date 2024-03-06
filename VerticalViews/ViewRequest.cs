@@ -3,17 +3,17 @@ using MediatR;
 
 namespace VerticalViews;
 
-public interface IViewRequest<TViewModel> : BaseRequest
+public interface IViewRequest<TViewModel> : IBaseRequest
 {
     IRequest<TViewModel> Request { get; set; }
 }
 
-public abstract class ViewRequest<TViewModel> : ViewRequest, BaseRequest
+public abstract class ViewRequest<TViewModel> : ViewRequest, IBaseRequest
 {
     public override object ViewModel => Activator.CreateInstance(typeof(TViewModel));
 }
 
-public abstract class ViewRequest : BaseRequest
+public abstract class ViewRequest : IBaseRequest
 {
     public virtual object ViewModel => null;
 
@@ -24,7 +24,7 @@ public abstract class ViewRequest : BaseRequest
     public abstract string ViewName { get; }
 }
 
-public interface BaseRequest
+public interface IBaseRequest
 {
     public string Feature { get; }
 

@@ -2,6 +2,6 @@
 {
     public interface IViewStringRender
     {
-        Task<string> RenderRazorViewToString(object model, BaseRequest options, bool isPartailView);
+        Task<string> RenderRazorViewToString(object model, IBaseRequest options, bool isPartailView);
     }
 }

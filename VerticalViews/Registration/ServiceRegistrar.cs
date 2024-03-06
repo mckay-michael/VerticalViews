@@ -1,11 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using VerticalViews.Request;
 using VerticalViews.Response;
-using VerticalViews.ResponseBehavior;
-using VerticalViews.Strategies;
 using VerticalViews.ViewRenders;
 
 namespace VerticalViews.Registration;
@@ -26,7 +22,7 @@ public static class ServiceRegistrar
         services.AddHttpContextAccessor();
 
         services.AddScoped(typeof(IViewSender<,>), typeof(ViewSender<,>)); 
-        services.AddScoped(typeof(IViewRequestStrategy<,>), typeof(ViewRequestStrategy<,>)); 
+        services.AddScoped(typeof(IViewSender<>), typeof(ViewSender<>));
         services.AddScoped(typeof(IResponsePipeline<,>), typeof(ResponsePipeline<,>)); 
         services.AddScoped(typeof(IRequestPipeline<,>), typeof(RequestPipeline<,>)); 
         services.AddScoped(typeof(IViewStringRender), typeof(ViewStringRender));

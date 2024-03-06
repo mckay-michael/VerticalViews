@@ -21,7 +21,7 @@ public class Program
         builder.Services
             .AddVerticalViews(Assembly.GetExecutingAssembly());
 
-        builder.Services.AddTransient<IRequestBehavior<GetPrivacyInformation, PrivacyViewModel>, PrivacyResponseBehavior>();
+        //builder.Services.AddTransient<IRequestBehavior<GetPrivacyInformation, PrivacyViewModel>, PrivacyResponseBehavior>();
 
         builder.Services.Configure<RazorViewEngineOptions>(o =>
         {

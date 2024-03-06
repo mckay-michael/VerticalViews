@@ -31,7 +31,7 @@ public class ViewStringRender : IViewStringRender
         _tempData = factory?.GetTempData(httpContextAccessor.HttpContext);
     }
 
-    public async Task<string> RenderRazorViewToString(object model, BaseRequest options, bool isPartailView)
+    public async Task<string> RenderRazorViewToString(object model, IBaseRequest options, bool isPartailView)
     {
         var actionContext = new ActionContext(
             _httpContextAccessor.HttpContext,

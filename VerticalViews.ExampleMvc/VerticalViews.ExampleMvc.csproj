@@ -22,6 +22,8 @@
     <None Remove="Features\Error\" />
     <None Remove="Features\Home\Mediator\" />
     <None Remove="Features\Home\ViewRequests\" />
+    <None Remove="Features\Privacy\Testing\" />
+    <None Remove="Features\Privacy\Testing\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
@@ -33,6 +35,8 @@
     <Folder Include="Features\Error\" />
     <Folder Include="Features\Home\Mediator\" />
     <Folder Include="Features\Home\ViewRequests\" />
+    <Folder Include="Features\Privacy\Testing\" />
+    <Folder Include="Features\Privacy\Testing\Views\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.2.0" />

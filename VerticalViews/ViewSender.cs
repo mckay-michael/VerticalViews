@@ -1,27 +1,47 @@
-﻿using System.Collections.Concurrent;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using VerticalViews.Strategies;
+﻿using Microsoft.AspNetCore.Http;
+using VerticalViews.Request;
 
 namespace VerticalViews;
 
 public class ViewSender<TRequest, TViewModel> : IViewSender<TRequest, TViewModel>
-    where TRequest : BaseRequest
+    where TRequest : IViewRequest<TViewModel>
 {
-    private readonly IViewRequestStrategy<TRequest, TViewModel> _requestStrategy;
+    private readonly IRequestPipeline<TRequest, TViewModel> _requestPipeline;
 
-    public ViewSender(IViewRequestStrategy<TRequest, TViewModel> requestStrategy)
+    public ViewSender(
+        IRequestPipeline<TRequest, TViewModel> requestPipeline)
     {
-        _requestStrategy = requestStrategy;
+        _requestPipeline = requestPipeline;
     }
 
-    public Task<IResult> View(BaseRequest request, CancellationToken cancellationToken = default)
+    public Task<IResult> View(IViewRequest<TViewModel> request, CancellationToken cancellationToken = default)
     {
-        return _requestStrategy.Execute(request, false, cancellationToken);
+        return _requestPipeline.Handle(request, false, cancellationToken);
     }
 
-    public Task<IResult> PartailView(BaseRequest request, CancellationToken cancellationToken = default)
+    public Task<IResult> PartailView(IViewRequest<TViewModel> request, CancellationToken cancellationToken = default)
     {
-        return _requestStrategy.Execute(request, true, cancellationToken);
+        return _requestPipeline.Handle(request, true, cancellationToken);
+    }
+}
+
+public class ViewSender<TRequest> : IViewSender<TRequest>
+    where TRequest : ViewRequest, new()
+{
+    private readonly IRequestPipeline<TRequest> _requestPipeline;
+
+    public ViewSender(IRequestPipeline<TRequest> requestPipeline)
+    {
+        _requestPipeline = requestPipeline;
+    }
+
+    public Task<IResult> View(CancellationToken cancellationToken = default)
+    {
+        return _requestPipeline.Handle(new TRequest(), false, cancellationToken);
+    }
+
+    public Task<IResult> PartailView(CancellationToken cancellationToken = default)
+    {
+        return _requestPipeline.Handle(new TRequest(), true, cancellationToken);
     }
 }

@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace VerticalViews.ResponseBehavior;
 
-public delegate Task<IResult> RequestHandlerDelegate();
+public delegate Task<IResult> ResponseHandlerDelegate();
 
 public interface IResponseBehavior<TRequest, TViewModel>
-    where TRequest : BaseRequest
+    where TRequest : IBaseRequest
 {
-    Task<IResult> Handle(TViewModel response, RequestHandlerDelegate next, CancellationToken cancellationToken);
+    Task<IResult> Handle(TViewModel response, ResponseHandlerDelegate next, CancellationToken cancellationToken);
 }

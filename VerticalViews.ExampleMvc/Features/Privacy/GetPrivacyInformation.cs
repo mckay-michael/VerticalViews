@@ -5,9 +5,9 @@ namespace VerticalViews.ExampleMvc.Features.Privacy;
 
 public class GetPrivacyInformation : IViewRequest<PrivacyViewModel>
 {
-    public string Feature => "Privacy";
+    public string Feature => "Testing";
 
-    public string Group => null;
+    public string Group => "Privacy";
 
     public string ViewName => "Privacy";
 
