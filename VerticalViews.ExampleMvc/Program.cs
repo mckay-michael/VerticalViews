@@ -1,14 +1,11 @@
 ﻿using System.Reflection;
+using MediatR;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
-using VerticalViews.ExampleMvc.Features.Error;
-using VerticalViews.ExampleMvc.Features.Home.ViewRequests;
 using VerticalViews.ExampleMvc.Features.Privacy;
-using VerticalViews.ExampleMvc.Models;
-using VerticalViews.Factories;
 using VerticalViews.Registration;
 using VerticalViews.Request;
-using VerticalViews.ResponseBehavior;
 
 namespace VerticalViews.ExampleMvc;
 
@@ -44,12 +41,13 @@ public class Program
         //app.MapGet("/", async ([FromServices] IViewSender viewSender) => await viewSender.View(ViewRequestFactory.Create<HomeViewRequest>()));
         //app.MapGet("/PartailViewIndex", async ([FromServices] IViewSender viewSender) => await viewSender.PartailView(ViewRequestFactory.Create<HomeViewRequest>()));
 
-        app.MapGet("/Privacy", async ([FromServices] IViewSender<GetPrivacyInformation, PrivacyViewModel> viewSender) =>
-            await viewSender.View(ViewRequestFactory.Create<GetPrivacyInformation, PrivacyViewModel>(
-                new GetPrivacyInformationRequest
+        app.MapGet("/Privacy", async ([FromServices] IViewSender<GetPrivacyInformation, PrivacyViewModel, GetPrivacyInformationRequest> viewSender) =>
+            {
+                return await viewSender.View(new GetPrivacyInformationRequest
                 {
                     Title = "Hello Mediator"
-                })));
+                });
+        });
 
         //app.MapGet("/PartailViewPrivacy", async ([FromServices] IViewSender viewSender) =>
         //    await viewSender.PartailView(ViewRequestFactory.Create<GetPrivacyInformation, PrivacyViewModel>(
@@ -68,3 +66,10 @@ public class Program
     }
 }
 
+public class TestPre : IRequestPreProcessor<GetPrivacyInformationRequest>
+{
+    public Task Process(GetPrivacyInformationRequest request, CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
+}

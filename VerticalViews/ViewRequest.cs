@@ -3,9 +3,10 @@ using MediatR;
 
 namespace VerticalViews;
 
-public interface IViewRequest<TViewModel> : IBaseRequest
+public interface IViewRequest<TRequest, TViewModel> : IBaseRequest
+    where TRequest : IRequest<TViewModel>
 {
-    IRequest<TViewModel> Request { get; set; }
+    TRequest Request { get; set; }
 }
 
 public abstract class ViewRequest<TViewModel> : ViewRequest, IBaseRequest

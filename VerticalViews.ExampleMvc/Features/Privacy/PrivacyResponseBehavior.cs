@@ -6,7 +6,7 @@ namespace VerticalViews.ExampleMvc.Features.Privacy;
 
 public class PrivacyResponseBehavior : IRequestBehavior<GetPrivacyInformation, PrivacyViewModel>
 {
-    public async Task<IResult> Handle(IViewRequest<PrivacyViewModel> request, Request.RequestHandlerDelegate next, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(GetPrivacyInformation request, RequestHandlerDelegate next, CancellationToken cancellationToken)
     {
         return TypedResults.Redirect("http://google.com/");
     }

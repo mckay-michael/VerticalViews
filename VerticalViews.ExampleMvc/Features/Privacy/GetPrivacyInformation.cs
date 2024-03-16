@@ -3,7 +3,7 @@ using MediatR;
 
 namespace VerticalViews.ExampleMvc.Features.Privacy;
 
-public class GetPrivacyInformation : IViewRequest<PrivacyViewModel>
+public class GetPrivacyInformation : IViewRequest<GetPrivacyInformationRequest, PrivacyViewModel>
 {
     public string Feature => "Testing";
 
@@ -11,6 +11,6 @@ public class GetPrivacyInformation : IViewRequest<PrivacyViewModel>
 
     public string ViewName => "Privacy";
 
-    public IRequest<PrivacyViewModel> Request { get; set; }
+    public GetPrivacyInformationRequest Request { get; set; }
 }
 

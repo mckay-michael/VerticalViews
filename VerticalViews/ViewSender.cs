@@ -1,27 +1,36 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using VerticalViews.Request;
 
 namespace VerticalViews;
 
-public class ViewSender<TRequest, TViewModel> : IViewSender<TRequest, TViewModel>
-    where TRequest : IViewRequest<TViewModel>
+public class ViewSender<TRequest, TViewModel, TMediatorReqeust> : IViewSender<TRequest, TViewModel, TMediatorReqeust>
+    where TRequest : IViewRequest<TMediatorReqeust, TViewModel>, new()
+    where TMediatorReqeust : IRequest<TViewModel>
 {
-    private readonly IRequestPipeline<TRequest, TViewModel> _requestPipeline;
+    private readonly IRequestPipeline<TRequest, TViewModel, TMediatorReqeust> _requestPipeline;
 
-    public ViewSender(
-        IRequestPipeline<TRequest, TViewModel> requestPipeline)
+    public ViewSender(IRequestPipeline<TRequest, TViewModel, TMediatorReqeust> requestPipeline)
     {
         _requestPipeline = requestPipeline;
     }
 
-    public Task<IResult> View(IViewRequest<TViewModel> request, CancellationToken cancellationToken = default)
+    public Task<IResult> PartailView(TMediatorReqeust request, CancellationToken cancellationToken = default)
     {
-        return _requestPipeline.Handle(request, false, cancellationToken);
+        var viewRequest = new TRequest();
+
+        viewRequest.Request = request;          
+
+        return _requestPipeline.Handle(viewRequest, true, cancellationToken);
     }
 
-    public Task<IResult> PartailView(IViewRequest<TViewModel> request, CancellationToken cancellationToken = default)
+    public Task<IResult> View(TMediatorReqeust request, CancellationToken cancellationToken = default)
     {
-        return _requestPipeline.Handle(request, true, cancellationToken);
+        var viewRequest = new TRequest();
+
+        viewRequest.Request = request;
+
+        return _requestPipeline.Handle(viewRequest, false, cancellationToken);
     }
 }
 

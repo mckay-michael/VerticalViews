@@ -7,8 +7,9 @@ using VerticalViews.ViewRenders;
 
 namespace VerticalViews.Response;
 
-public class ResponsePipeline<TRequest, TViewModel> : IResponsePipeline<TRequest, TViewModel>
-    where TRequest : IBaseRequest
+public class ResponsePipeline<TRequest, TViewModel, TMediatorReqeust> : IResponsePipeline<TRequest, TViewModel, TMediatorReqeust>
+    where TRequest : IViewRequest<TMediatorReqeust, TViewModel>
+    where TMediatorReqeust : IRequest<TViewModel>
 {
     private readonly IEnumerable<IResponseBehavior<TRequest, TViewModel>> _responseBehaviors;
     private readonly IViewStringRender _viewRender;
@@ -24,7 +25,7 @@ public class ResponsePipeline<TRequest, TViewModel> : IResponsePipeline<TRequest
         _mediator = mediator;
     }
 
-    public async Task<IResult> Handle(IViewRequest<TViewModel> request, bool isPartailView, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(TRequest request, bool isPartailView, CancellationToken cancellationToken)
     {
         var viewModel = await _mediator.Send(request.Request);
 
@@ -39,6 +40,6 @@ public class ResponsePipeline<TRequest, TViewModel> : IResponsePipeline<TRequest
             .Reverse()
             .Aggregate((ResponseHandlerDelegate)Handler,
                 (next, behavior) => () => behavior.Handle(viewModel, next, cancellationToken))();
-    }
+        }
 }
 

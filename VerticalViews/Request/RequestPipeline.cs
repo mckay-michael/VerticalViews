@@ -1,25 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using VerticalViews.Response;
 using VerticalViews.Results;
 using VerticalViews.ViewRenders;
 
 namespace VerticalViews.Request;
 
-public class RequestPipeline<TRequest, TViewModel> : IRequestPipeline<TRequest, TViewModel>
-    where TRequest : IViewRequest<TViewModel>
+public class RequestPipeline<TRequest, TViewModel, TMediatorReqeust> : IRequestPipeline<TRequest, TViewModel, TMediatorReqeust>
+    where TRequest : IViewRequest<TMediatorReqeust, TViewModel>
+    where TMediatorReqeust : IRequest<TViewModel>
 {
     private readonly IEnumerable<IRequestBehavior<TRequest, TViewModel>> _requestBehaviors;
-    private readonly IResponsePipeline<TRequest, TViewModel> _responsePipeline;
+    private readonly IResponsePipeline<TRequest, TViewModel, TMediatorReqeust> _responsePipeline;
 
     public RequestPipeline(
         IEnumerable<IRequestBehavior<TRequest, TViewModel>> requestBehaviors,
-        IResponsePipeline<TRequest, TViewModel> responsePipeline)
+        IResponsePipeline<TRequest, TViewModel, TMediatorReqeust> responsePipeline)
     {
         _requestBehaviors = requestBehaviors;
         _responsePipeline = responsePipeline;
     }
 
-    public Task<IResult> Handle(IViewRequest<TViewModel> request, bool isPartailView, CancellationToken cancellationToken)
+    public Task<IResult> Handle(TRequest request, bool isPartailView, CancellationToken cancellationToken)
     {
         Task<IResult> Handler() =>
             _responsePipeline.Handle(request, isPartailView, cancellationToken);
@@ -27,7 +29,7 @@ public class RequestPipeline<TRequest, TViewModel> : IRequestPipeline<TRequest, 
         return _requestBehaviors
            .Reverse()
            .Aggregate((RequestHandlerDelegate)Handler,
-               (next, behavior) => () => behavior.Handle(next, cancellationToken))();
+               (next, behavior) => () => behavior.Handle(request, next, cancellationToken))();
     }
 }
 
@@ -46,11 +48,11 @@ public class RequestPipeline<TRequest> : IRequestPipeline<TRequest>
         _viewRender = viewRender;
     }
 
-    public Task<IResult> Handle(ViewRequest request, bool isPartailView, CancellationToken cancellationToken)
+    public Task<IResult> Handle(TRequest request, bool isPartailView, CancellationToken cancellationToken)
     {
         async Task<IResult> Handler()
         {
-            var html = await _viewRender.RenderRazorViewToString(((ViewRequest)request).ViewModel, request, isPartailView);
+            var html = await _viewRender.RenderRazorViewToString(request.ViewModel, request, isPartailView);
 
             return new HtmlResult(html);
         }
@@ -58,6 +60,6 @@ public class RequestPipeline<TRequest> : IRequestPipeline<TRequest>
         return _requestBehaviors
            .Reverse()
            .Aggregate((RequestHandlerDelegate)Handler,
-               (next, behavior) => () => behavior.Handle(next, cancellationToken))();
+               (next, behavior) => () => behavior.Handle(request, next, cancellationToken))();
     }
 }

@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>VerticalViews</PackageId>
-    <Version>8.0.5</Version>
+    <Version>8.0.12</Version>
     <Authors>McKay Smith</Authors>
     <Company>McKay Smith</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,7 +15,6 @@
     <None Remove="Results\" />
     <None Remove="Registration\" />
     <None Remove="ViewRenders\" />
-    <None Remove="Factories\" />
     <None Remove="Request\" />
     <None Remove="Response\" />
   </ItemGroup>
@@ -23,7 +22,6 @@
     <Folder Include="Results\" />
     <Folder Include="Registration\" />
     <Folder Include="ViewRenders\" />
-    <Folder Include="Factories\" />
     <Folder Include="Request\" />
     <Folder Include="Response\" />
   </ItemGroup>
